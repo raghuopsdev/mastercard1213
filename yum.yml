@@ -1,0 +1,11 @@
+---
+- hosts: webserver
+  become: yes
+  tasks:
+    - name: ensure httpd is installed
+      yum: name=httpd state=present
+      notify:
+        - Restart apache
+  handlers:
+    - name: Restart apache
+      service: name=httpd state=restarted
