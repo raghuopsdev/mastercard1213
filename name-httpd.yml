@@ -1,0 +1,23 @@
+---
+
+  - hosts: webserver
+
+    vars:
+
+      http_port: 8087
+
+      doc_root: /var/www/html
+
+
+
+    vars_prompt:
+
+    - name: "username"
+
+      prompt: "Enter yourname"
+
+    tasks:
+
+    - name: Copyindex file
+
+      template: src=index.html dest=/var/www/html/index.html mode=0644
