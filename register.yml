@@ -1,0 +1,15 @@
+---
+
+ - hosts: webserver
+
+   become: yes
+
+   tasks:
+
+     - shell: /usr/bin/whoami
+
+       register: username
+
+     - debug: msg="{{username}}"
+
+     - file: path=/tmp/mastercard.txt owner={{username.stdout}}
