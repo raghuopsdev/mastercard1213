@@ -1,0 +1,16 @@
+---
+
+- hosts: webserver
+  become: yes
+
+  vars:
+
+    favorite_snacks:
+    - hotdog
+    - icecream
+    - chips
+
+  tasks:
+    - name: create directories for storing my snacks
+      file: path=/tmp/{{ item }} state=directory
+      with_items: '{{ favorite_snacks }}'

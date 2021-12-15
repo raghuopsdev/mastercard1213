@@ -1,0 +1,18 @@
+---
+
+- hosts: webserver
+  become: yes
+  vars:
+    fn: line1
+
+  tasks:
+
+    - name: create file
+      file: path=/tmp/{{ fn }} state=touch
+
+    - name: Add lines
+      lineinfile: dest=/tmp/{{ fn }} line={{ item }} state=present
+      with_items:
+      - Line 1
+      - Line 2
+      - Line 3
