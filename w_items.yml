@@ -1,0 +1,14 @@
+---
+
+- hosts: webserver
+  become: yes
+
+  tasks:
+
+  - name: manage packages
+    package: name={{ item.name }} state={{ item.state }}
+    with_items:
+      - { name: tree, state: present }
+      - { name: nmap, state: present }
+      - { name: tomcat, state: present }
+      - { name: tomcat-webapps, state: present }
