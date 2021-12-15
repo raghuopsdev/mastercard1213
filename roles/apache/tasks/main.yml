@@ -1,0 +1,22 @@
+---
+# tasks file for apache
+- name: Ensure Apache installed
+  yum: name=httpd state=present
+
+- name: Creates dlrectoy
+  file: path=/var/www/html state=directory
+
+- name: Ensure llbsellnux-python Installed
+  yum: name=libselinux-python state=present
+
+- name: Ensure Apache is running
+  service: name=httpd enabled=yes state=started
+
+- name: Deploy configuration File
+  template: src=templates/proxy.conf dest=/etc/httpd/conf.d/proxy.conf
+
+  notify:
+  - Restart Apache
+
+- name: Copy Site Files
+  template: src=templates/index.html dest={{doc_root}}/index.html mode=0644
