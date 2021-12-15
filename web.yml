@@ -1,0 +1,48 @@
+---
+
+- hosts: webserver
+  become: yes
+
+  vars:
+
+      http_port: 80
+      doc_dir: /ansible/
+      doc_root: /var/www/html/ansible/
+      max_clients: 5
+      ansible_python_interpreter: python
+
+  vars_prompt:
+
+      - name: "username"
+        prompt: what is your name ?
+
+  tasks:
+
+      - name: Ensure lib-python installed
+        yum: name=libselinux-python state=present
+
+      - name: ensure httpd installed
+        yum: name=httpd state=present
+        when: ansible_os_family == "RedHat"
+
+      - name: create a directory
+        file: path=/var/www/html/ansible state=directory
+
+
+      - name: ensure apache running
+        service: name=httpd enabled=yes state=started
+
+
+      - name: deploy template
+        template: src=templates/proxy.conf dest=/etc/httpd/conf.d/proxy.conf
+
+        notify:
+          - Restart apache
+
+
+      - name: copy static files
+        template: src=templates/index.html dest={{doc_root}}/index.html mode=0644
+
+  handlers:
+       - name: Restart apache
+         service: name=httpd state=restarted
