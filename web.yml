@@ -25,6 +25,18 @@
         yum: name=httpd state=present
         when: ansible_os_family == "RedHat"
 
+
+      - name: ensure tomcat installed
+        yum: name=tomcat state=present
+        when: ansible_os_family == "RedHat"
+
+      - name: ensure tomcat-webapps installed
+        yum: name=tomcat-webapps state=present
+        when: ansible_os_family == "RedHat"
+
+      - name: restart tomcat
+        service: name=tomcat enabled=yes state=restarted
+
       - name: create a directory
         file: path=/var/www/html/ansible state=directory
 
