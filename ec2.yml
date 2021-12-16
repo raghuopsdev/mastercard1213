@@ -1,0 +1,39 @@
+---
+- name: Create a new Demo EC2 instance
+  hosts: local
+  connection: local
+  gather_facts: False
+
+  vars:
+     keypair: 11Nov21
+     instance_type: t2.micro
+     ami: ami-052cef05d01020f1d
+     region: ap-south-1
+     name: Raghu
+     subnet: subnet-037e3db5f092dd8b1
+#     ami: ami-052cef05d01020f1d
+  vars_files:
+     - pass.yml
+
+  tasks:
+
+    - name: Create an ec2 instance
+      ec2:
+         aws_access_key: "{{ aws_access_key }}"
+         aws_secret_key: "{{ aws_secret_key }}"
+         key_name: "{{ keypair }}"
+         group: default  # security group name
+         instance_type: "{{ instance_type}}"
+         image: "{{ ami }}"
+         wait: true
+         region: "{{ region }}"
+         count: 1  # default
+         count_tag:
+            Name: "{{ name }}"
+         instance_tags:
+            Name: "{{ name }}"
+
+         vpc_subnet_id: "{{ subnet }}"
+         assign_public_ip: yes
+
+      register: ec2_machine
