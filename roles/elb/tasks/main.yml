@@ -1,0 +1,39 @@
+---
+# tasks file for elb
+- ec2_elb_lb:
+
+         aws_access_key: "{{ aws_access_key }}"
+         aws_secret_key: "{{ aws_secret_key }}"
+
+         name: raghu
+
+         region: ap-south-1
+         state: present
+
+         zones:
+
+          - ap-south-1a
+          - ap-south-1b
+
+         instance_ids: 
+          - i-002b1c63203b17d75
+          - i-0d6abf00e5196a5e5
+
+
+         health_check:
+
+            ping_protocol: http # options are http, https, ssl, tcp
+            ping_port: 80
+            ping_path: "/index.html" # not required for tcp or ssl
+            response_timeout: 5 # seconds
+            interval: 30 # seconds
+            unhealthy_threshold: 2
+            healthy_threshold: 10
+
+         listeners:
+
+          - protocol: http # options are http, https, ssl, tcp
+            load_balancer_port: 80
+            instance_port: 80
+
+  register: demo
