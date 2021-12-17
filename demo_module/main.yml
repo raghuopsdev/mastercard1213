@@ -1,0 +1,14 @@
+---
+- hosts: webserver
+  become: yes
+  gather_facts: yes
+  vars_prompt:
+    - name: givename
+      prompt: "Please provide your name"
+      private: no
+      failed_when: givename is undefined
+  tasks:
+    - name: python execution
+      testing: yourName={{ givename }}
+      register: result
+    - debug: var=result
